@@ -27,7 +27,7 @@ jobs:
       - name: 'Run dotnet'
         shell: pwsh
         run: |
-          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          pushd '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
           dotnet build --configuration Release --output ./output
           popd
 
@@ -35,7 +35,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ./output
-          key: build-dist-${{ github.run_id }}
+          key: build-output-${{ github.run_id }}
 
   terraform-test:
     name: "Terraform - Test"
@@ -90,7 +90,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ./output
-          key: build-dist-${{ github.run_id }}
+          key: build-output-${{ github.run_id }}
 
       - name: 'Check cache exists'
         if: ${{ steps.get-output-cache.outputs.cache-hit == 'false' }}
@@ -153,3 +153,36 @@ jobs:
       - name: Terraform Apply
         id: Apply
         run: terraform apply -no-color -auto-approve -input=false tfplan
+
+  deploy-live:
+    name: 'Deploy - Test'
+    runs-on: 'ubuntu-latest'
+    environment: live
+    needs: terraform-live
+
+    steps:
+      - name: 'Cache Dist'
+        id: get-output-cache
+        uses: actions/cache@v2
+        with:
+          path: ./output
+          key: build-output-${{ github.run_id }}
+
+      - name: 'Check cache exists'
+        if: ${{ steps.get-output-cache.outputs.cache-hit == 'false' }}
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('Output cache not found')
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: '{"clientId":"${{ secrets.AZURE_AD_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_AD_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZURE_AD_TENANT_ID }}"}'
+
+      - name: 'Run Azure Functions Action'
+        uses: Azure/functions-action@v1
+        id: fa
+        with:
+          app-name: 'propt-properties-live-func-ukso'
+          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
