@@ -6,8 +6,14 @@ resource "azurerm_cosmosdb_account" "properties" {
   kind                = "GlobalDocumentDB"
 
   geo_location {
-    location          = azurerm_resource_group.rg.location
+    location          = azurerm_resource_group.properties.location
     failover_priority = 0
+  }
+
+  consistency_policy {
+    consistency_level       = "Session"
+    max_interval_in_seconds = 10
+    max_staleness_prefix    = 200
   }
 
   tags = local.common_tags
@@ -15,8 +21,8 @@ resource "azurerm_cosmosdb_account" "properties" {
 
 resource "azurerm_cosmosdb_sql_database" "properties" {
   name                = "properties"
-  resource_group_name = data.azurerm_cosmosdb_account.properties.resource_group_name
-  account_name        = data.azurerm_cosmosdb_account.properties.name
+  resource_group_name = azurerm_cosmosdb_account.properties.resource_group_name
+  account_name        = azurerm_cosmosdb_account.properties.name
   throughput          = 400
 }
 
