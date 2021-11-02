@@ -8,7 +8,7 @@ on:
 
 env:
   DOTNET_VERSION: "3.1.x"
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: './src/Propt.Properties.Api/'
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: './src/Propt.Properties.Api'
 
 jobs:
   build-test:
