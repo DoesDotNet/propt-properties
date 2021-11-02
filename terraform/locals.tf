@@ -5,7 +5,8 @@ locals {
     system      = "${var.system}"
   }
 
-  name_prefix = "${var.project}-${var.system}-${var.environment}"
+  name_prefix         = "${var.project}-${var.system}-${var.environment}"
+  storage_name_prefix = "${var.project}${var.system}${var.environment}"
 
   locations = {
     "UK South" = "ukso"
