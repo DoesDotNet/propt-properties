@@ -34,7 +34,7 @@ jobs:
       - name: "Cache Output"
         uses: actions/cache@v2
         with:
-          path: ./output
+          path: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
           key: build-output-${{ github.run_id }}
 
   terraform-test:
@@ -85,11 +85,11 @@ jobs:
     needs: [terraform-test, build-test]
 
     steps:
-      - name: 'Cache Dist'
+      - name: 'Cache Output'
         id: get-output-cache
         uses: actions/cache@v2
         with:
-          path: ./output
+          path: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
           key: build-output-${{ github.run_id }}
 
       - name: 'Check cache exists'
