@@ -104,7 +104,7 @@ jobs:
         with:
           creds: '{"clientId":"${{ secrets.AZURE_AD_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_AD_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZURE_AD_TENANT_ID }}"}'
 
-      - name: 'Run Azure Functions Action'
+      - name: 'Deploy Function App'
         uses: Azure/functions-action@v1
         id: fa
         with:
@@ -155,7 +155,7 @@ jobs:
         run: terraform apply -no-color -auto-approve -input=false tfplan
 
   deploy-live:
-    name: 'Deploy - Test'
+    name: 'Deploy - Live'
     runs-on: 'ubuntu-latest'
     environment: live
     needs: terraform-live
@@ -165,7 +165,7 @@ jobs:
         id: get-output-cache
         uses: actions/cache@v2
         with:
-          path: ./output
+          path: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
           key: build-output-${{ github.run_id }}
 
       - name: 'Check cache exists'
