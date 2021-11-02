@@ -11,7 +11,7 @@ resource "azurerm_app_service_plan" "properties" {
 }
 
 resource "azurerm_function_app" "properties" {
-  name                       = "test-azure-functions"
+  name                       = format("%s-func-ukso", local.name_prefix)
   location                   = azurerm_resource_group.properties.location
   resource_group_name        = azurerm_resource_group.properties.name
   app_service_plan_id        = azurerm_app_service_plan.properties.id

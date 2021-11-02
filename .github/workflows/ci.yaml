@@ -1,22 +1,53 @@
-name: 'Build & Deploy'
+name: "Build & Deploy"
 
 on:
   push:
     branches: [main]
-  
+
   workflow_dispatch:
-    
+
+env:
+      DOTNET_VERSION: "3.1.x"
+      AZURE_FUNCTIONAPP_PACKAGE_PATH: './src/Propt.Properties/'
+      AZURE_FUNCTIONAPP_NAME: 'propt-properties-test-func-ukso'
+
 jobs:
+  build-test:
+    name: "Build and Test"
+    runs-on: "ubuntu-latest"
+    environment: test
+    
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup DotNet ${{ env.DOTNET_VERSION }} Environment
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: 'Run dotnet'
+        shell: pwsh
+        run: |
+          pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
+          dotnet build --configuration Release --output ./output
+          popd
+
+      - name: "Cache Output"
+        uses: actions/cache@v2
+        with:
+          path: ./output
+          key: build-dist-${{ github.run_id }}
+
   terraform-test:
-    name: 'Terraform - Test'
-    runs-on: 'ubuntu-latest'
+    name: "Terraform - Test"
+    runs-on: "ubuntu-latest"
     environment: test
     env:
       ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
       ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
-      TF_ACTIONS_WORKING_DIR: './terraform'
+      TF_ACTIONS_WORKING_DIR: "./terraform"
 
     defaults:
       run:
@@ -48,9 +79,43 @@ jobs:
         id: Apply
         run: terraform apply -no-color -auto-approve -input=false tfplan
 
-  terraform-live:
-    name: 'Terraform - Live'
+  deploy-test:
+    name: 'Deploy - Test'
     runs-on: 'ubuntu-latest'
+    environment: test
+    needs: [terraform-test, build-test]
+
+    steps:
+      - name: 'Cache Dist'
+        id: get-output-cache
+        uses: actions/cache@v2
+        with:
+          path: ./output
+          key: build-dist-${{ github.run_id }}
+
+      - name: 'Check cache exists'
+        if: ${{ steps.get-output-cache.outputs.cache-hit == 'false' }}
+        uses: actions/github-script@v3
+        with:
+          script: |
+            core.setFailed('Output cache not found')
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: '{"clientId":"${{ secrets.AZURE_AD_CLIENT_ID }}","clientSecret":"${{ secrets.AZURE_AD_CLIENT_SECRET }}","subscriptionId":"${{ secrets.AZURE_SUBSCRIPTION_ID }}","tenantId":"${{ secrets.AZURE_AD_TENANT_ID }}"}'
+
+      - name: 'Run Azure Functions Action'
+        uses: Azure/functions-action@v1
+        id: fa
+        with:
+          app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+          package: '${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/output'
+
+
+  terraform-live:
+    name: "Terraform - Live"
+    runs-on: "ubuntu-latest"
     needs: terraform-test
     environment: live
     env:
@@ -58,7 +123,7 @@ jobs:
       ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
-      TF_ACTIONS_WORKING_DIR: './terraform'
+      TF_ACTIONS_WORKING_DIR: "./terraform"
 
     defaults:
       run:
