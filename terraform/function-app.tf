@@ -21,7 +21,6 @@ resource "azurerm_function_app" "properties" {
 
   app_settings = {
     "FUNCTIONS_WORKER_RUNTIME"        = "dotnet-isolated"
-    "APPINSIGHTS_INSTRUMENTATIONKEY"  = azurerm_application_insights.properties.instrumentation_key
     "CosmosSettings:ConnectionString" = "${azurerm_cosmosdb_account.properties.endpoint};AccountKey=${azurerm_cosmosdb_account.properties.primary_master_key};"
     "CosmosSettings:DatabaseName"     = azurerm_cosmosdb_sql_database.properties.name
     "CosmosSettings:ContainerName"    = azurerm_cosmosdb_sql_container.properties.name
