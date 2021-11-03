@@ -17,4 +17,16 @@ resource "azurerm_function_app" "properties" {
   app_service_plan_id        = azurerm_app_service_plan.properties.id
   storage_account_name       = azurerm_storage_account.properties.name
   storage_account_access_key = azurerm_storage_account.properties.primary_access_key
+  version = "~4"
+
+  app_settings = {
+    "APPINSIGHTS_INSTRUMENTATIONKEY" = azurerm_application_insights.properties.instrumentation_key
+    "CosmosSettings:ConnectionString" = "${azurerm_cosmosdb_account.properties.endpoint};AccountKey=${azurerm_cosmosdb_account.properties.primary_master_key};"
+    "CosmosSettings:DatabaseName" = azurerm_cosmosdb_sql_database.properties.name
+    "CosmosSettings:ContainerName" = azurerm_cosmosdb_sql_container.properties.name
+  }
+
+  site_config {
+    use_32_bit_worker_process = false
+  }
 }

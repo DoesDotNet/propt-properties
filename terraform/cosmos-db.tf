@@ -50,8 +50,4 @@ resource "azurerm_cosmosdb_sql_container" "properties" {
       path = "/excluded/?"
     }
   }
-
-  unique_key {
-    paths = ["/id"]
-  }
 }

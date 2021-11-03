@@ -6,12 +6,14 @@ using Propt.Properties.Application.Data;
 using Propt.Properties.Application.Mappings;
 using Propt.Properties.Cosmos.Repository;
 using Propt.Properties.Cosmos.Repository.Mappings;
+using System;
+using System.Threading.Tasks;
 
 namespace Propt.Properties.Api
 {
     public class Program
     {
-        public static void Main()
+        public static async Task Main()
         {
             var host = new HostBuilder()
                 .ConfigureFunctionsWorkerDefaults()
@@ -31,7 +33,15 @@ namespace Propt.Properties.Api
                 })
                 .Build();
 
-            host.Run();
+            try
+            {
+                await host.RunAsync();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
     }
 }
