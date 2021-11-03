@@ -17,6 +17,16 @@ namespace Propt.Properties.Cosmos.Repository
             if (settings == null)
                 throw new ArgumentNullException(nameof(settings));
 
+            if (settings.Value.ConnectionString == null)
+                throw new ArgumentNullException(nameof(settings.Value.ConnectionString));
+
+            if (settings.Value.ContainerName == null)
+                throw new ArgumentNullException(nameof(settings.Value.ContainerName));
+
+            if (settings.Value.DatabaseName == null)
+                throw new ArgumentNullException(nameof(settings.Value.DatabaseName));
+
+
             CosmosClient client = new CosmosClient(settings.Value.ConnectionString);
             Database database = client.GetDatabase(settings.Value.DatabaseName);
 

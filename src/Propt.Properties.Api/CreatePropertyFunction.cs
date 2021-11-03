@@ -26,6 +26,9 @@ namespace Propt.Properties.Api
 
             CreatePropertyRequestModel createPropertyModel = await req.ReadFromJsonAsync<CreatePropertyRequestModel>();
 
+            if(createPropertyModel == null)
+                return req.CreateResponse(HttpStatusCode.BadRequest);
+
             var command = createPropertyModel.ToCommand();
             var response = req.CreateResponse(HttpStatusCode.Created);
 

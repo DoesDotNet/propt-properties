@@ -10,15 +10,8 @@
         public string Postcode { get; }
 
 
-        private Property(Guid id, string nameNumber, string street, string city, string country, string postcode)
-        {
-            Id = id;
-            NameNumber = nameNumber;
-            Street = street;
-            City = city;
-            Country = country;
-            Postcode = postcode;
-        }
+        private Property(Guid id, string nameNumber, string street, string city, string country, string postcode) =>
+            (Id, NameNumber, Street, City, Country, Postcode) = (id, nameNumber, street, city, country, postcode);
 
         public static Property Create(Guid id, string nameNumber, string street, string city, string country, string postcode)
         {

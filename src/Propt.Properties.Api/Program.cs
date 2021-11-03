@@ -6,7 +6,6 @@ using Propt.Properties.Application.Data;
 using Propt.Properties.Application.Mappings;
 using Propt.Properties.Cosmos.Repository;
 using Propt.Properties.Cosmos.Repository.Mappings;
-using System;
 using System.Threading.Tasks;
 
 namespace Propt.Properties.Api
@@ -33,15 +32,7 @@ namespace Propt.Properties.Api
                 })
                 .Build();
 
-            try
-            {
-                await host.RunAsync();
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
+            await host.RunAsync();
         }
     }
 }

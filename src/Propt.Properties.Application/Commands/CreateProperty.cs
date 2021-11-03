@@ -12,13 +12,6 @@ namespace Propt.Properties.Application.Commands
         public string Postcode { get; }
 
         public CreateProperty(Guid id, string nameNumber, string street, string city, string county, string postcode)
-        {
-            Id = id;
-            NameNumber = nameNumber;
-            Street = street;
-            City = city;
-            County = county;
-            Postcode = postcode;
-        }
+            => (Id, NameNumber, Street, City, County, Postcode) = (id, nameNumber, street, city, county, postcode);
     }
 }
