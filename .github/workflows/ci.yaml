@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 env:
-  DOTNET_VERSION: "3.1.x"
+  DOTNET_VERSION: "6.0.x"
   AZURE_FUNCTIONAPP_PACKAGE_PATH: './src/Propt.Properties.Api'
 
 jobs:
