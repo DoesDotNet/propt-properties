@@ -11,3 +11,11 @@ variable "system" {
   type    = string
   default = "properties"
 }
+
+variable "servicebus_name" {
+  type = string
+}
+
+variable "servicebus_rg" {
+  type = string
+}

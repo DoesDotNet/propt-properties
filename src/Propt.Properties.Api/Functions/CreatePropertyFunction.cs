@@ -6,7 +6,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 
-namespace Propt.Properties.Api
+namespace Propt.Properties.Api.Functions
 {
     public class CreatePropertyFunction
     {
@@ -26,7 +26,7 @@ namespace Propt.Properties.Api
 
             CreatePropertyRequestModel createPropertyModel = await req.ReadFromJsonAsync<CreatePropertyRequestModel>();
 
-            if(createPropertyModel == null)
+            if (createPropertyModel == null)
                 return req.CreateResponse(HttpStatusCode.BadRequest);
 
             var command = createPropertyModel.ToCommand();
@@ -44,7 +44,7 @@ namespace Propt.Properties.Api
                 _logger.LogError("Error createing property", ex);
                 response = req.CreateResponse(HttpStatusCode.InternalServerError);
             }
-            
+
             return response;
         }
     }

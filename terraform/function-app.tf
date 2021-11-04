@@ -26,6 +26,18 @@ resource "azurerm_function_app" "properties" {
     "CosmosSettings:ContainerName"    = azurerm_cosmosdb_sql_container.properties.name
   }
 
+  connection_string {
+    name  = "Cosmos"
+    type  = "DocDb"
+    value = "${azurerm_cosmosdb_account.properties.endpoint};AccountKey=${azurerm_cosmosdb_account.properties.primary_master_key};"
+  }
+
+  connection_string {
+    name  = "EventServiceBus"
+    type  = "ServiceBus"
+    value = data.azurerm_servicebus_namespace_authorization_rule.properties.primary_connection_string
+  }
+
   site_config {
     use_32_bit_worker_process = false
   }

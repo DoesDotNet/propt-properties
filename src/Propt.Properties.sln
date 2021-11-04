@@ -8,13 +8,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".Actions", ".Actions", "{9C
 		..\.github\workflows\ci.yaml = ..\.github\workflows\ci.yaml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Propt.Properties.Api", "Propt.Properties.Api\Propt.Properties.Api.csproj", "{90F408D3-CA51-436A-987C-70B4F17E1076}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Propt.Properties.Api", "Propt.Properties.Api\Propt.Properties.Api.csproj", "{90F408D3-CA51-436A-987C-70B4F17E1076}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Propt.Properties.Application", "Propt.Properties.Application\Propt.Properties.Application.csproj", "{EA549FA1-7E37-4DE0-9CCB-0AACBEF7927A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Propt.Properties.Application", "Propt.Properties.Application\Propt.Properties.Application.csproj", "{EA549FA1-7E37-4DE0-9CCB-0AACBEF7927A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Propt.Properties.Cosmos.Repository", "Propt.Properties.Cosmos.Repository\Propt.Properties.Cosmos.Repository.csproj", "{0A880AAE-9ADF-45FC-B64C-372F8AF2CB48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Propt.Properties.Cosmos.Repository", "Propt.Properties.Cosmos.Repository\Propt.Properties.Cosmos.Repository.csproj", "{0A880AAE-9ADF-45FC-B64C-372F8AF2CB48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Propt.Properties.DataModels", "Propt.Properties.DataModels\Propt.Properties.DataModels.csproj", "{1C328975-77AA-42A8-A1C2-156EED3D2113}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Propt.Properties.DataModels", "Propt.Properties.DataModels\Propt.Properties.DataModels.csproj", "{1C328975-77AA-42A8-A1C2-156EED3D2113}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

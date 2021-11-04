@@ -8,7 +8,7 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Propt.Properties.Application.Queries;
 
-namespace Propt.Properties.Api
+namespace Propt.Properties.Api.Functions
 {
     public class GetPropertyFunction
     {
